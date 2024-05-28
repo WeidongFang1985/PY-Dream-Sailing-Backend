@@ -22,7 +22,10 @@ const schema = new Schema(
 		category:{
 			type:String,
 			required: true,
-		}
+		},
+		is_approved: {
+			type: String,
+		},
 	},
 	{
 		timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}
