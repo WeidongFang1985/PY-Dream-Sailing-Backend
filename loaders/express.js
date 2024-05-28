@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const config = require('../app/config')
 const connectToDB = require("../app/utils/db");
+const userRouter = require("../app/routes/v1/users");
 
 const startServer = async () => {
 	const application = express();
@@ -28,6 +29,8 @@ module.exports = async () => {
 	const app = await startServer();
 	app.use(cors());
 	app.use(express.json());
+	app.use(config.api.prefix, userRouter);
+
 
 	return app;
 }
