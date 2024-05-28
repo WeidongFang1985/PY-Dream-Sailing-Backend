@@ -5,6 +5,7 @@ const connectToDB = require("../app/utils/db");
 const userRouter = require("../app/routes/v1/users");
 const campaignRouter = require("../app/routes/v1/campaigns");
 const adminRouter = require("../app/routes/v1/admins");
+const companyRouter = require("../app/routes/v1/companies");
 
 const startServer = async () => {
 	const application = express();
@@ -34,6 +35,7 @@ module.exports = async () => {
 	app.use(config.api.prefix, userRouter);
 	app.use(config.api.prefix, campaignRouter);
 	app.use(config.api.prefix, adminRouter);
+	app.use(config.api.prefix, companyRouter);
 
 	return app;
 }
