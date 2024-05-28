@@ -14,7 +14,6 @@ const register = [
       .notEmpty().withMessage('user type is required'),
 ];
 
-
 const login = [
     body('email')
         .notEmpty().withMessage('email is required')
