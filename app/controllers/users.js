@@ -51,3 +51,24 @@ exports.password = async (req, res) => {
 		res.status(500).json({ message: "An error occurred", error: error.message });
 	}
 };
+
+// Login
+// POST localhost:8080/api/v1/users
+exports.register = async (req, res) => {
+	res.json('hello')
+}
+
+// Show one user
+// GET localhost:8080/api/v1/users/:id
+exports.show = async (req, res) => {
+	const {id} = req.params;
+	const user = await UserModel.findById(id).populate({
+		path: 'campaigns',
+		options: { sort: { 'created_at': -1 } }
+	}).exec();
+	if (!user) {
+		res.status(404).json({error: "User not exist"})
+		return
+	}
+	res.json(user)
+}
