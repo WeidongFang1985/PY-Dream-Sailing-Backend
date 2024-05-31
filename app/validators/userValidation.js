@@ -5,7 +5,7 @@ const register = [
       .notEmpty().withMessage('username is required'),
     body('password')
       .notEmpty().withMessage('password is required')
-      .matches(/^(?=.*[0-9])(?=.*[a-zA-Z]).{8,16}$/)
+      .matches(/^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$/)
       .withMessage('The password must be 8-16 characters long and contain at least one number and one letter'),
     body('email')
       .notEmpty().withMessage('email is required')
