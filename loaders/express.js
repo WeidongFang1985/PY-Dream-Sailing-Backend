@@ -7,6 +7,7 @@ const campaignRouter = require("../app/routes/v1/campaigns");
 const adminRouter = require("../app/routes/v1/admins");
 const companyRouter = require("../app/routes/v1/companies");
 const authTokenRouter = require("../app/routes/v1/authToken");
+const uploadRouter = require("../app/routes/v1/upload");
 
 const startServer = async () => {
 	const application = express();
@@ -38,6 +39,7 @@ module.exports = async () => {
 	app.use(config.api.prefix, adminRouter);
 	app.use(config.api.prefix, companyRouter);
 	app.use(config.api.prefix, authTokenRouter);
+	app.use(config.api.prefix, uploadRouter);
 
 	return app;
 }
