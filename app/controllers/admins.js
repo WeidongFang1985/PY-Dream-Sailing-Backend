@@ -1,4 +1,5 @@
 const AdminModel = require('../models/admin');
+const CampaignModel = require('../models/campaign')
 const {generateToken} = require('../utils/jwt');
 
 // Get All Admins - localhost:8080/api/v1/admins
@@ -30,3 +31,19 @@ exports.login = async (req, res) => {
 		res.status(500).json({ message: "An error occurred during login", error: error.message });
 	}
 }
+
+// Admin -- Accept or Decline the Campaign
+exports.review = async (req, res) => {
+	const { id, status } = req.body;
+	try {
+		const campaign = await CampaignModel.findById(id);
+		if (!campaign) {
+			return res.status(404).send({ message: 'Campaign not found' });
+		}
+		campaign.is_approved = status;
+		await campaign.save();
+		res.status(200).json({ message: 'Campaign status updated successfully' });
+	} catch (error) {
+		res.status(500).send({ message: 'Error updating campaign status' });
+	}
+};
