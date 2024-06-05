@@ -89,7 +89,6 @@ exports.register = async (req, res) => {
 exports.show = async (req, res) => {
 	const { id } = req.params;
 
-	// 检查是否是有效的MongoDB ObjectId
 	if (!Types.ObjectId.isValid(id)) {
 		return res.status(400).json({ error: "Invalid user ID" });
 	}
