@@ -1,6 +1,7 @@
 const UserModel = require('../models/user');
 const {generateToken} = require('../utils/jwt');
 const {validationResult} = require("express-validator");
+const {Types} = require("mongoose");
 
 // GET localhost:8080/api/v1/users
 exports.index = async (req, res) => {
@@ -18,10 +19,12 @@ exports.login = async (req, res) => {
 		return
 	}
 	const user = await UserModel.findOne({email}).exec()
+
 	if (!user) {
 		res.status(404).json({error: 'The email address you entered does not exist'});
 		return;
 	}
+	const username = user.username;
 
 	if (!await user.validatePassword(password)) {
 		res.status(401).json({error: 'Invalid email or password'});
@@ -29,7 +32,7 @@ exports.login = async (req, res) => {
 	}
 	const token = generateToken({id: user.id, email});
 	const id = user.id;
-	res.status(201).json({id, token});
+	res.status(201).json({id,username,token});
 }
 
 
@@ -52,7 +55,7 @@ exports.password = async (req, res) => {
 	}
 };
 
-// Login
+// Register
 // POST localhost:8080/api/v1/users
 exports.register = async (req, res) => {
 	const {email, password, username, is_business} = req.body;
@@ -78,20 +81,32 @@ exports.register = async (req, res) => {
 	await user.save();
 	const token = generateToken({id: user.id, email});
 	const id = user.id;
-	res.status(201).json({id, token});
+	res.status(201).json({id,username,token});
 }
 
 // Show one user
 // GET localhost:8080/api/v1/users/:id
 exports.show = async (req, res) => {
-	const {id} = req.params;
-	const user = await UserModel.findById(id).populate({
-		path: 'campaigns',
-		options: { sort: { 'created_at': -1 } }
-	}).exec();
-	if (!user) {
-		res.status(404).json({error: "User not exist"})
-		return
+	const { id } = req.params;
+
+	// 检查是否是有效的MongoDB ObjectId
+	if (!Types.ObjectId.isValid(id)) {
+		return res.status(400).json({ error: "Invalid user ID" });
 	}
-	res.json(user)
-}
+
+	try {
+		const user = await UserModel.findById(id).populate({
+			path: 'campaigns',
+			options: { sort: { 'created_at': -1 } }
+		}).exec();
+
+		if (!user) {
+			return res.status(404).json({ error: "User not exist" });
+		}
+
+		res.json(user);
+	} catch (error) {
+		console.error('Error finding user:', error);
+		res.status(500).json({ message: "An error occurred", error: error.message });
+	}
+};
