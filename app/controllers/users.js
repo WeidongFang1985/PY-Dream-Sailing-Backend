@@ -25,6 +25,7 @@ exports.login = async (req, res) => {
 		return;
 	}
 	const username = user.username;
+	const is_business = user.is_business;
 
 	if (!await user.validatePassword(password)) {
 		res.status(401).json({error: 'Invalid email or password'});
@@ -32,7 +33,7 @@ exports.login = async (req, res) => {
 	}
 	const token = generateToken({id: user.id, email});
 	const id = user.id;
-	res.status(201).json({id,username,token});
+	res.status(201).json({id,username,is_business,token});
 }
 
 
@@ -81,7 +82,7 @@ exports.register = async (req, res) => {
 	await user.save();
 	const token = generateToken({id: user.id, email});
 	const id = user.id;
-	res.status(201).json({id,username,token});
+	res.status(201).json({id,username,is_business,token});
 }
 
 // Show one user
