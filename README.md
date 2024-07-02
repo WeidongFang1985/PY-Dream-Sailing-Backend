@@ -1,4 +1,4 @@
-## Welcome to Pet Lover
+## Welcome to Dream Sailing
 
 ----------------------------------------------------  
 ### How to run this app:  
